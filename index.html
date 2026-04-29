@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GV Dosa — Authentic South Indian</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tiro+Tamil:ital@0;1&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --gold: #C9952A;
+  --gold-light: #E8B84B;
+  --gold-pale: #F5DFA0;
+  --cream: #FDF8EE;
+  --charcoal: #18120A;
+  --deep: #100D07;
+  --spice: #8B2500;
+  --leaf: #1E3A1E;
+  --rust: #A03010;
+  --warm: #2A1608;
+  --muted: rgba(253,248,238,0.5);
+  --border: rgba(201,149,42,0.22);
+  --border-bright: rgba(201,149,42,0.5);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Jost',sans-serif;background:var(--charcoal);color:var(--cream);overflow-x:hidden;cursor:none;}
+
+/* ── CURSOR ── */
+.cursor{width:7px;height:7px;background:var(--gold);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+.cursor-ring{width:32px;height:32px;border:1px solid rgba(201,149,42,.4);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .1s ease,top .1s ease;}
+
+/* ── KOLAM SVG background pattern ── */
+.kolam-bg{position:absolute;inset:0;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='30' fill='none' stroke='%23C9952A' stroke-width='1'/%3E%3Ccircle cx='40' cy='40' r='18' fill='none' stroke='%23C9952A' stroke-width='1'/%3E%3Ccircle cx='40' cy='40' r='6' fill='none' stroke='%23C9952A' stroke-width='1'/%3E%3Cline x1='40' y1='10' x2='40' y2='70' stroke='%23C9952A' stroke-width='.6'/%3E%3Cline x1='10' y1='40' x2='70' y2='40' stroke='%23C9952A' stroke-width='.6'/%3E%3Cline x1='19' y1='19' x2='61' y2='61' stroke='%23C9952A' stroke-width='.6'/%3E%3Cline x1='61' y1='19' x2='19' y2='61' stroke='%23C9952A' stroke-width='.6'/%3E%3Ccircle cx='40' cy='10' r='2.5' fill='%23C9952A'/%3E%3Ccircle cx='40' cy='70' r='2.5' fill='%23C9952A'/%3E%3Ccircle cx='10' cy='40' r='2.5' fill='%23C9952A'/%3E%3Ccircle cx='70' cy='40' r='2.5' fill='%23C9952A'/%3E%3Ccircle cx='19' cy='19' r='2.5' fill='%23C9952A'/%3E%3Ccircle cx='61' cy='19' r='2.5' fill='%23C9952A'/%3E%3Ccircle cx='19' cy='61' r='2.5' fill='%23C9952A'/%3E%3Ccircle cx='61' cy='61' r='2.5' fill='%23C9952A'/%3E%3C/svg%3E");background-size:80px 80px;pointer-events:none;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;width:100%;z-index:200;padding:24px 64px;display:flex;justify-content:space-between;align-items:center;transition:background .5s,padding .4s,border-color .5s;border-bottom:1px solid transparent;}
+nav.scrolled{background:rgba(16,13,7,.97);backdrop-filter:blur(16px);padding:15px 64px;border-bottom-color:var(--border);}
+.nav-logo{display:flex;flex-direction:column;line-height:1;text-decoration:none;}
+.nav-logo-en{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:600;letter-spacing:.06em;color:var(--gold);}
+.nav-logo-ta{font-family:'Tiro Tamil',serif;font-size:.82rem;color:rgba(201,149,42,.6);letter-spacing:.04em;margin-top:1px;}
+.nav-links{display:flex;gap:42px;list-style:none;}
+.nav-links a{color:var(--cream);text-decoration:none;font-size:.73rem;letter-spacing:.2em;text-transform:uppercase;opacity:.7;transition:opacity .3s,color .3s;}
+.nav-links a:hover{opacity:1;color:var(--gold);}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none;padding:4px;}
+.hamburger span{display:block;width:24px;height:1px;background:var(--cream);transition:.3s;}
+.mob-menu{display:none;position:fixed;inset:0;background:rgba(16,13,7,.98);z-index:300;flex-direction:column;align-items:center;justify-content:center;gap:32px;}
+.mob-menu.open{display:flex;}
+.mob-menu a{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;color:var(--cream);text-decoration:none;letter-spacing:.04em;transition:color .3s;}
+.mob-menu a:hover{color:var(--gold);}
+.mob-close{position:absolute;top:24px;right:30px;font-size:2rem;background:none;border:none;color:var(--muted);cursor:none;}
+
+/* ── HERO ── */
+.hero{height:100vh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=1900&q=85') center/cover no-repeat;transform:scale(1.08);animation:hZoom 20s ease-in-out infinite alternate;filter:brightness(.28) saturate(1.3);}
+@keyframes hZoom{from{transform:scale(1.08);}to{transform:scale(1.01);}}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(16,13,7,.35) 0%,rgba(16,13,7,.08) 35%,rgba(16,13,7,.75) 100%);}
+/* Kolam overlay top-right */
+.hero-kolam{position:absolute;top:-40px;right:-40px;width:320px;height:320px;opacity:.08;pointer-events:none;}
+.hero-kolam svg{width:100%;height:100%;}
+.hero-content{position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px;}
+.hero-tamil{font-family:'Tiro Tamil',serif;font-size:1.1rem;color:var(--gold-pale);letter-spacing:.12em;opacity:0;animation:fadeUp 1s .2s forwards;}
+.hero-tag{font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);opacity:0;animation:fadeUp 1s .5s forwards;}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(4.5rem,11vw,10rem);font-weight:300;line-height:.92;letter-spacing:-.01em;opacity:0;animation:fadeUp 1.1s .7s forwards;}
+.hero-title em{font-style:italic;color:var(--gold-light);display:block;}
+.hero-ornament{display:flex;align-items:center;gap:16px;opacity:0;animation:fadeUp 1s 1s forwards;}
+.hero-ornament-line{width:56px;height:1px;background:linear-gradient(to right,transparent,var(--gold));}
+.hero-ornament-line.rev{background:linear-gradient(to left,transparent,var(--gold));}
+.hero-ornament-dot{width:5px;height:5px;background:var(--gold);transform:rotate(45deg);}
+.hero-sub{font-size:.82rem;letter-spacing:.14em;color:rgba(253,248,238,.6);font-weight:300;opacity:0;animation:fadeUp 1s 1.1s forwards;}
+.hero-cta{display:flex;gap:14px;margin-top:10px;opacity:0;animation:fadeUp 1s 1.3s forwards;}
+.btn-gold{padding:13px 34px;background:var(--gold);color:var(--deep);font-family:'Jost',sans-serif;font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;font-weight:500;text-decoration:none;transition:background .3s,transform .3s;cursor:none;}
+.btn-gold:hover{background:var(--gold-light);transform:translateY(-2px);}
+.btn-ghost{padding:13px 34px;border:1px solid rgba(201,149,42,.45);color:var(--cream);font-family:'Jost',sans-serif;font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;font-weight:300;text-decoration:none;transition:border-color .3s,color .3s,transform .3s;cursor:none;}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px);}
+.scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 1s 2s forwards;z-index:2;}
+.scroll-hint span{font-size:.63rem;letter-spacing:.25em;text-transform:uppercase;color:rgba(253,248,238,.35);}
+.scroll-line{width:1px;height:44px;background:linear-gradient(to bottom,var(--gold),transparent);animation:sLine 2.2s ease-in-out infinite;}
+@keyframes sLine{0%,100%{opacity:.3;}50%{opacity:1;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── TICKER RIBBON ── */
+.ticker{background:var(--gold);color:var(--deep);overflow:hidden;white-space:nowrap;padding:13px 0;}
+.ticker-inner{display:inline-flex;animation:ticker 25s linear infinite;}
+.ticker-item{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500;padding:0 32px;}
+.ticker-sep{opacity:.5;}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ── SECTIONS ── */
+section{padding:120px 64px;}
+.section-label{font-size:.66rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.section-label::before,.section-label::after{content:'';width:24px;height:1px;background:var(--gold);}
+
+/* ── ABOUT ── */
+#about{background:var(--deep);position:relative;overflow:hidden;}
+#about .kolam-bg{opacity:.03;}
+.about-wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative;z-index:1;}
+.about-img-frame{position:relative;}
+.about-img-frame::before{content:'';position:absolute;top:-18px;left:-18px;right:18px;bottom:18px;border:1px solid var(--border-bright);z-index:0;}
+.about-img-frame::after{content:'ஜி.வி. தோசை';font-family:'Tiro Tamil',serif;position:absolute;bottom:-28px;right:0;font-size:.85rem;color:rgba(201,149,42,.4);letter-spacing:.06em;}
+.about-img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;position:relative;z-index:1;filter:brightness(.85) saturate(1.1);}
+.about-text h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,3.8vw,3.5rem);font-weight:300;line-height:1.15;margin-bottom:26px;}
+.about-text h2 em{font-style:italic;color:var(--gold-light);}
+.about-text p{font-size:.9rem;line-height:1.9;color:rgba(253,248,238,.6);font-weight:300;margin-bottom:18px;}
+.leaf-divider{display:flex;align-items:center;gap:14px;margin:32px 0;}
+.leaf-divider-line{flex:1;height:1px;background:var(--border);}
+.leaf-icon{color:var(--gold);font-size:1.2rem;}
+.about-pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:36px;}
+.pillar{padding:24px 20px;border:1px solid var(--border);text-align:center;position:relative;overflow:hidden;transition:border-color .3s;}
+.pillar:hover{border-color:var(--border-bright);}
+.pillar-icon{font-size:1.6rem;margin-bottom:10px;}
+.pillar-num{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold);font-weight:300;display:block;line-height:1;}
+.pillar-label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:6px;}
+
+/* ── SPECIALITY STRIP ── */
+.spl-strip{background:var(--warm);padding:60px 64px;position:relative;overflow:hidden;}
+.spl-strip .kolam-bg{opacity:.04;}
+.spl-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);position:relative;z-index:1;}
+.spl-card{background:var(--warm);padding:36px 28px;text-align:center;transition:background .3s;}
+.spl-card:hover{background:rgba(201,149,42,.07);}
+.spl-card-img{width:80px;height:80px;border-radius:50%;object-fit:cover;margin:0 auto 18px;border:2px solid var(--border-bright);filter:saturate(1.1);}
+.spl-card-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:6px;font-weight:400;}
+.spl-card-desc{font-size:.76rem;color:var(--muted);line-height:1.6;font-weight:300;}
+.spl-card-price{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--gold);margin-top:12px;font-weight:300;}
+
+/* ── MENU ── */
+#menu{background:var(--charcoal);position:relative;overflow:hidden;}
+#menu .kolam-bg{opacity:.025;}
+.menu-header{text-align:center;margin-bottom:64px;position:relative;z-index:1;}
+.menu-header h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,5.5vw,4.5rem);font-weight:300;line-height:1.1;margin-bottom:10px;}
+.menu-header h2 em{font-style:italic;color:var(--gold-light);}
+.menu-header-ta{font-family:'Tiro Tamil',serif;font-size:1rem;color:rgba(201,149,42,.45);letter-spacing:.06em;margin-top:4px;}
+.menu-tabs{display:flex;justify-content:center;flex-wrap:wrap;gap:0;margin-bottom:56px;border-bottom:1px solid var(--border);position:relative;z-index:1;}
+.tab-btn{padding:14px 26px;background:none;border:none;color:rgba(253,248,238,.4);font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;cursor:none;transition:color .3s;position:relative;}
+.tab-btn::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .3s;}
+.tab-btn.active{color:var(--gold);}
+.tab-btn.active::after{transform:scaleX(1);}
+.tab-btn:hover{color:var(--cream);}
+.menu-panel{display:none;max-width:1040px;margin:0 auto;position:relative;z-index:1;}
+.menu-panel.active{display:block;}
+.menu-category{margin-bottom:48px;}
+.menu-cat-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:var(--gold-light);margin-bottom:2px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;}
+.menu-cat-title span{font-family:'Tiro Tamil',serif;font-size:.82rem;color:rgba(201,149,42,.4);font-weight:300;}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:12px;}
+.menu-item{background:var(--charcoal);padding:22px 28px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;transition:background .3s;}
+.menu-item:hover{background:rgba(201,149,42,.05);}
+.item-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;margin-bottom:4px;}
+.item-meta{font-size:.72rem;color:var(--muted);font-weight:300;}
+.item-badge{display:inline-block;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,149,42,.35);padding:2px 8px;margin-top:6px;}
+.item-price{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--gold);white-space:nowrap;flex-shrink:0;}
+
+/* ── GALLERY ── */
+#gallery{padding:0;overflow:hidden;background:var(--deep);}
+.gallery-label{text-align:center;padding:60px 64px 40px;position:relative;}
+.gallery-label h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:300;}
+.gallery-label h2 em{font-style:italic;color:var(--gold-light);}
+.gallery-strip{display:flex;animation:gScroll 32s linear infinite;width:max-content;}
+.gallery-strip:hover{animation-play-state:paused;}
+@keyframes gScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.gallery-img{width:360px;height:260px;object-fit:cover;flex-shrink:0;filter:brightness(.7) saturate(.8) contrast(1.05);transition:filter .6s;}
+.gallery-img:hover{filter:brightness(.95) saturate(1.1) contrast(1.0);}
+.gallery-pad{padding-bottom:72px;}
+
+/* ── BANANA LEAF DIVIDER ── */
+.bl-divider{background:var(--leaf);padding:48px 64px;display:flex;align-items:center;justify-content:center;gap:32px;position:relative;overflow:hidden;}
+.bl-divider::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cellipse cx='30' cy='30' rx='22' ry='8' fill='none' stroke='rgba(255,255,255,0.06)' stroke-width='1'/%3E%3Cline x1='30' y1='22' x2='30' y2='38' stroke='rgba(255,255,255,0.04)' stroke-width='1'/%3E%3C/svg%3E") center/60px 60px;}
+.bl-text{font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,2.5vw,1.6rem);font-weight:300;font-style:italic;color:rgba(253,248,238,.85);text-align:center;position:relative;z-index:1;line-height:1.6;}
+.bl-text em{color:var(--gold-pale);font-style:normal;}
+
+/* ── CONTACT ── */
+#contact{background:var(--deep);position:relative;overflow:hidden;}
+#contact .kolam-bg{opacity:.03;}
+.contact-wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;position:relative;z-index:1;}
+.contact-text h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,3.8vw,3.4rem);font-weight:300;line-height:1.15;margin-bottom:20px;}
+.contact-text h2 em{font-style:italic;color:var(--gold-light);}
+.contact-text p{font-size:.88rem;line-height:1.85;color:var(--muted);font-weight:300;margin-bottom:44px;}
+.contact-list{list-style:none;display:flex;flex-direction:column;}
+.contact-item{display:flex;gap:22px;align-items:flex-start;padding:24px 0;border-bottom:1px solid var(--border);}
+.contact-item:first-child{border-top:1px solid var(--border);}
+.ci-icon{width:42px;height:42px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gold);}
+.ci-icon svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.5;}
+.ci-label{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
+.ci-val{font-size:.88rem;color:var(--cream);font-weight:300;line-height:1.7;}
+.ci-val a{color:inherit;text-decoration:none;transition:color .3s;}
+.ci-val a:hover{color:var(--gold);}
+.map-block{border:1px solid var(--border);position:relative;overflow:hidden;}
+.map-tag{position:absolute;top:18px;left:18px;z-index:1;font-size:.63rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);background:rgba(16,13,7,.8);padding:6px 12px;border:1px solid var(--border);}
+.map-block iframe{width:100%;height:420px;display:block;border:0;filter:grayscale(1) contrast(1.1) brightness(.7);}
+
+/* ── FOOTER ── */
+footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 64px;}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;margin-bottom:40px;padding-bottom:40px;border-bottom:1px solid var(--border);}
+.footer-brand{}
+.footer-logo-en{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:600;color:var(--gold);line-height:1;}
+.footer-logo-ta{font-family:'Tiro Tamil',serif;font-size:.85rem;color:rgba(201,149,42,.45);margin-top:3px;}
+.footer-brand p{font-size:.8rem;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;max-width:260px;}
+.footer-links h4{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;}
+.footer-links ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.footer-links a{font-size:.84rem;color:var(--muted);text-decoration:none;transition:color .3s;font-weight:300;}
+.footer-links a:hover{color:var(--cream);}
+.footer-hours h4{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;}
+.footer-hours p{font-size:.84rem;color:var(--muted);font-weight:300;line-height:2;}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;gap:20px;}
+.footer-copy{font-size:.7rem;letter-spacing:.1em;color:rgba(253,248,238,.25);}
+.footer-socials{display:flex;gap:10px;}
+.footer-socials a{width:36px;height:36px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;font-size:.68rem;letter-spacing:.08em;transition:border-color .3s,color .3s;cursor:none;}
+.footer-socials a:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.rd1{transition-delay:.12s;}.rd2{transition-delay:.24s;}.rd3{transition-delay:.36s;}.rd4{transition-delay:.48s;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:18px 24px;}
+  nav.scrolled{padding:13px 24px;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  section{padding:80px 24px;}
+  .about-wrap{grid-template-columns:1fr;gap:40px;}
+  .about-img-frame::after{display:none;}
+  .spl-inner{grid-template-columns:1fr 1fr;}
+  .menu-grid{grid-template-columns:1fr;}
+  .contact-wrap{grid-template-columns:1fr;gap:48px;}
+  .footer-top{flex-direction:column;gap:32px;}
+  .footer-bottom{flex-direction:column;gap:14px;text-align:center;}
+  .about-pillars{grid-template-columns:repeat(3,1fr);}
+  .spl-strip{padding:48px 24px;}
+}
+@media(max-width:560px){
+  .spl-inner{grid-template-columns:1fr;}
+  .about-pillars{grid-template-columns:1fr 1fr;}
+  .hero-cta{flex-direction:column;align-items:center;}
+  .menu-tabs{justify-content:flex-start;overflow-x:auto;}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mobMenu">
+  <button class="mob-close" id="mobClose">✕</button>
+  <a href="#about" onclick="closeMob()">Our Story</a>
+  <a href="#menu" onclick="closeMob()">Menu</a>
+  <a href="#gallery" onclick="closeMob()">Gallery</a>
+  <a href="#contact" onclick="closeMob()">Visit Us</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-en">GV Dosa</span>
+    <span class="nav-logo-ta">ஜி.வி. தோசை</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">Our Story</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Visit Us</a></li>
+  </ul>
+  <button class="hamburger" id="hambBtn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="kolam-bg"></div>
+  <!-- decorative large kolam top-right -->
+  <svg style="position:absolute;top:-60px;right:-60px;width:380px;height:380px;opacity:.06;pointer-events:none;" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="90" stroke="#C9952A" stroke-width="1"/>
+    <circle cx="100" cy="100" r="68" stroke="#C9952A" stroke-width="1"/>
+    <circle cx="100" cy="100" r="46" stroke="#C9952A" stroke-width="1"/>
+    <circle cx="100" cy="100" r="24" stroke="#C9952A" stroke-width="1"/>
+    <circle cx="100" cy="100" r="8" fill="#C9952A" opacity=".5"/>
+    <line x1="100" y1="10" x2="100" y2="190" stroke="#C9952A" stroke-width=".8"/>
+    <line x1="10" y1="100" x2="190" y2="100" stroke="#C9952A" stroke-width=".8"/>
+    <line x1="36" y1="36" x2="164" y2="164" stroke="#C9952A" stroke-width=".8"/>
+    <line x1="164" y1="36" x2="36" y2="164" stroke="#C9952A" stroke-width=".8"/>
+    <circle cx="100" cy="10" r="4" fill="#C9952A"/>
+    <circle cx="100" cy="190" r="4" fill="#C9952A"/>
+    <circle cx="10" cy="100" r="4" fill="#C9952A"/>
+    <circle cx="190" cy="100" r="4" fill="#C9952A"/>
+    <circle cx="36" cy="36" r="4" fill="#C9952A"/>
+    <circle cx="164" cy="36" r="4" fill="#C9952A"/>
+    <circle cx="36" cy="164" r="4" fill="#C9952A"/>
+    <circle cx="164" cy="164" r="4" fill="#C9952A"/>
+  </svg>
+  <div class="hero-content">
+    <div class="hero-tamil">தென்னிந்திய உணவகம்</div>
+    <p class="hero-tag">Authentic South Indian Cuisine</p>
+    <h1 class="hero-title">GV<em>Dosa</em></h1>
+    <div class="hero-ornament">
+      <div class="hero-ornament-line"></div>
+      <div class="hero-ornament-dot"></div>
+      <div class="hero-ornament-dot" style="width:8px;height:8px;background:var(--gold-light);"></div>
+      <div class="hero-ornament-dot"></div>
+      <div class="hero-ornament-line rev"></div>
+    </div>
+    <p class="hero-sub">Handcrafted Dosas &nbsp;·&nbsp; Stone-ground Batters &nbsp;·&nbsp; Pure Tradition</p>
+    <div class="hero-cta">
+      <a href="#menu" class="btn-gold">Explore Menu</a>
+      <a href="#contact" class="btn-ghost">Find Us</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner">
+    <span class="ticker-item">Ghee Rava Dosa</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Masala Dosa</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Filter Coffee</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Ragi Uttapam</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Mini Idli</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Coconut Chutney</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Mysore Masala</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Sada Aapam</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Podi Idli</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Medu Vada</span><span class="ticker-item ticker-sep">✦</span>
+    <!-- duplicate for seamless -->
+    <span class="ticker-item">Ghee Rava Dosa</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Masala Dosa</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Filter Coffee</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Ragi Uttapam</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Mini Idli</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Coconut Chutney</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Mysore Masala</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Sada Aapam</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Podi Idli</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Medu Vada</span><span class="ticker-item ticker-sep">✦</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="kolam-bg"></div>
+  <div class="about-wrap">
+    <div class="about-img-frame reveal">
+      <img class="about-img"
+        src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&q=85"
+        alt="Dosa being made" loading="lazy"/>
+    </div>
+    <div class="about-text">
+      <div class="section-label reveal">Our Story</div>
+      <h2 class="reveal rd1">Where the Griddle<em>Tells Its Story</em></h2>
+      <p class="reveal rd2">GV Dosa was born from a deep reverence for South Indian home cooking. Every recipe we serve has travelled through generations — fermented overnight, ground by hand, tempered with care. We bring the honest flavours of Tamil Nadu straight to your table.</p>
+      <p class="reveal rd2">From the first ladle on the griddle to the last drop of sambar, every detail is intentional. No shortcuts, no compromise — only the pure taste of tradition.</p>
+      <div class="leaf-divider reveal rd3">
+        <div class="leaf-divider-line"></div>
+        <span class="leaf-icon">🌿</span>
+        <div class="leaf-divider-line"></div>
+      </div>
+      <div class="about-pillars reveal rd3">
+        <div class="pillar">
+          <div class="pillar-icon">🫙</div>
+          <span class="pillar-num">100%</span>
+          <div class="pillar-label">Fresh Daily</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">🌱</div>
+          <span class="pillar-num">Pure</span>
+          <div class="pillar-label">Vegetarian</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">🏺</div>
+          <span class="pillar-num">40+</span>
+          <div class="pillar-label">Dishes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPECIALITIES STRIP -->
+<div class="spl-strip">
+  <div class="kolam-bg"></div>
+  <div class="section-label reveal" style="justify-content:center;margin-bottom:36px;">Chef's Signatures</div>
+  <div class="spl-inner reveal rd1">
+    <div class="spl-card">
+      <img class="spl-card-img" src="https://images.unsplash.com/photo-1630383249896-424e482df921?w=200&q=80" alt="Ghee Rava Dosa"/>
+      <div class="spl-card-name">Ghee Rava Mysore Masala</div>
+      <div class="spl-card-desc">Semolina dosa, crisp &amp; golden, with spiced Mysore chutney &amp; potato filling</div>
+      <div class="spl-card-price">₹200</div>
+    </div>
+    <div class="spl-card">
+      <img class="spl-card-img" src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=200&q=80" alt="Idli"/>
+      <div class="spl-card-name">Mini Mysore Idli</div>
+      <div class="spl-card-desc">Soft bite-sized idlis tossed in classic Mysore spice &amp; ghee</div>
+      <div class="spl-card-price">₹120</div>
+    </div>
+    <div class="spl-card">
+      <img class="spl-card-img" src="https://images.unsplash.com/photo-1610057099431-d73a1c9d2f2f?w=200&q=80" alt="Aapam"/>
+      <div class="spl-card-name">G.V. Spl. Coconut Stew Aapam</div>
+      <div class="spl-card-desc">Lace-edged aapam with our house-made aromatic coconut stew</div>
+      <div class="spl-card-price">₹110</div>
+    </div>
+    <div class="spl-card">
+      <img class="spl-card-img" src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=200&q=80" alt="Filter Coffee"/>
+      <div class="spl-card-name">Filter Coffee</div>
+      <div class="spl-card-desc">South Indian decoction pulled the traditional way, served in brass tumblers</div>
+      <div class="spl-card-price">₹45</div>
+    </div>
+  </div>
+</div>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="kolam-bg"></div>
+  <div class="menu-header">
+    <div class="section-label reveal" style="justify-content:center;">What We Serve</div>
+    <h2 class="reveal rd1">The <em>Full Menu</em></h2>
+    <div class="menu-header-ta reveal rd2">உணவு பட்டியல்</div>
+  </div>
+
+  <div class="menu-tabs reveal">
+    <button class="tab-btn active" data-tab="dosa">Dosa</button>
+    <button class="tab-btn" data-tab="rava">Ghee Rava Dosa</button>
+    <button class="tab-btn" data-tab="uttapam">Uttapam</button>
+    <button class="tab-btn" data-tab="ragi">Ragi Uttapam</button>
+    <button class="tab-btn" data-tab="idli">Idli</button>
+    <button class="tab-btn" data-tab="vada">Vada</button>
+    <button class="tab-btn" data-tab="aapam">Aapam</button>
+    <button class="tab-btn" data-tab="others">Others</button>
+    <button class="tab-btn" data-tab="bev">Beverages</button>
+  </div>
+
+  <!-- DOSA -->
+  <div class="menu-panel active" id="tab-dosa">
+    <div class="menu-category">
+      <div class="menu-cat-title">Dosa <span>தோசை</span></div>
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="item-name">Sada Dosa</div></div><div class="item-price">₹80</div></div>
+        <div class="menu-item"><div><div class="item-name">Masala Dosa</div></div><div class="item-price">₹100</div></div>
+        <div class="menu-item"><div><div class="item-name">Ghee Podi Roast</div><div class="item-meta">Roasted in ghee with podi spice</div></div><div class="item-price">₹120</div></div>
+        <div class="menu-item"><div><div class="item-name">Mysore Masala Dosa</div><span class="item-badge">Popular</span></div><div class="item-price">₹120</div></div>
+        <div class="menu-item"><div><div class="item-name">Mysore Sada Dosa</div></div><div class="item-price">₹100</div></div>
+        <div class="menu-item"><div><div class="item-name">Tomato Masala Dosa</div></div><div class="item-price">₹120</div></div>
+        <div class="menu-item"><div><div class="item-name">Paneer Bhurji Dosa</div></div><div class="item-price">₹150</div></div>
+        <div class="menu-item"><div><div class="item-name">Mysore Paneer Masala</div><span class="item-badge">Chef's Pick</span></div><div class="item-price">₹160</div></div>
+        <div class="menu-item"><div><div class="item-name">Paneer Cheese Dosa</div></div><div class="item-price">₹160</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GHEE RAVA -->
+  <div class="menu-panel" id="tab-rava">
+    <div class="menu-category">
+      <div class="menu-cat-title">Ghee Rava Dosa <span>ரவா தோசை</span></div>
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="item-name">Ghee Rava Dosa</div><div class="item-meta">Classic semolina dosa in ghee</div></div><div class="item-price">₹150</div></div>
+        <div class="menu-item"><div><div class="item-name">Ghee Rava Sada Podi</div></div><div class="item-price">₹160</div></div>
+        <div class="menu-item"><div><div class="item-name">Ghee Rava Onion</div></div><div class="item-price">₹170</div></div>
+        <div class="menu-item"><div><div class="item-name">Ghee Rava Masala</div></div><div class="item-price">₹170</div></div>
+        <div class="menu-item"><div><div class="item-name">Ghee Rava Onion Masala</div></div><div class="item-price">₹190</div></div>
+        <div class="menu-item"><div><div class="item-name">Ghee Rava Coconut</div></div><div class="item-price">₹190</div></div>
+        <div class="menu-item"><div><div class="item-name">Ghee Rava Coconut Onion Mix</div></div><div class="item-price">₹190</div></div>
+        <div class="menu-item"><div><div class="item-name">Ghee Rava Onion Garlic Mix</div></div><div class="item-price">₹180</div></div>
+        <div class="menu-item"><div><div class="item-name">Ghee Rava Mysore Masala</div><span class="item-badge">Signature</span></div><div class="item-price">₹200</div></div>
+      </div>
+    </div>
+    <div class="menu-category" style="margin-top:36px;">
+      <div class="menu-cat-title">Rava Dosa <span>சாதா ரவா</span></div>
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="item-name">Rava Sada Dosa</div></div><div class="item-price">₹120</div></div>
+        <div class="menu-item"><div><div class="item-name">Rava Onion Dosa</div></div><div class="item-price">₹140</div></div>
+        <div class="menu-item"><div><div class="item-name">Rava Masala Dosa</div></div><div class="item-price">₹140</div></div>
+        <div class="menu-item"><div><div class="item-name">Rava Onion Masala Dosa</div></div><div class="item-price">₹160</div></div>
+        <div class="menu-item"><div><div class="item-name">G.V. Spl. Rava Coconut Dosa</div><span class="item-badge">House Special</span></div><div class="item-price">₹160</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UTTAPAM -->
+  <div class="menu-panel" id="tab-uttapam">
+    <div class="menu-category">
+      <div class="menu-cat-title">Uttapam <span>உத்தப்பம்</span></div>
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="item-name">Sada Uttapam</div></div><div class="item-price">₹90</div></div>
+        <div class="menu-item"><div><div class="item-name">Podi Uttapam</div></div><div class="item-price">₹100</div></div>
+        <div class="menu-item"><div><div class="item-name">Onion Uttapam</div></div><div class="item-price">₹120</div></div>
+        <div class="menu-item"><div><div class="item-name">Tomato Uttapam</div></div><div class="item-price">₹130</div></div>
+        <div class="menu-item"><div><div class="item-name">Onion-Tomato Uttapam</div></div><div class="item-price">₹120</div></div>
+        <div class="menu-item"><div><div class="item-name">Tomato Capsicum Uttapam</div></div><div class="item-price">₹120</div></div>
+        <div class="menu-item"><div><div class="item-name">Veg. Mix Uttapam</div></div><div class="item-price">₹140</div></div>
+        <div class="menu-item"><div><div class="item-name">G.V. Spl. Coconut Uttapam</div><span class="item-badge">House Special</span></div><div class="item-price">₹150</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAGI -->
+  <div class="menu-panel" id="tab-ragi">
+    <div class="menu-category">
+      <div class="menu-cat-title">Ghee Ragi Uttapam <span>ராகி உத்தப்பம்</span></div>
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="item-name">Ghee Ragi Sada Uttapam</div><div class="item-meta">Wholesome finger millet base</div></div><div class="item-price">₹130</div></div>
+        <div class="menu-item"><div><div class="item-name">Ghee Ragi Podi Uttapam</div></div><div class="item-price">₹140</div></div>
+        <div class="menu-item"><div><div class="item-name">Ghee Ragi Onion Uttapam</div></div><div class="item-price">₹160</div></div>
+        <div class="menu-item"><div><div class="item-name">Ghee Ragi Onion Tomato Uttapam</div></div><div class="item-price">₹160</div></div>
+        <div class="menu-item"><div><div class="item-name">Ghee Ragi Mix Veg. Uttapam</div></div><div class="item-price">₹170</div></div>
+        <div class="menu-item"><div><div class="item-name">Ghee Ragi Tomato Capsicum Uttapam</div></div><div class="item-price">₹170</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IDLI -->
+  <div class="menu-panel" id="tab-idli">
+    <div class="menu-category">
+      <div class="menu-cat-title">Idli <span>இட்லி</span></div>
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="item-name">Idli</div><div class="item-meta">2 pcs</div></div><div class="item-price">₹50</div></div>
+        <div class="menu-item"><div><div class="item-name">Idli Dip</div><div class="item-meta">2 pcs — dipped in sambar</div></div><div class="item-price">₹60</div></div>
+        <div class="menu-item"><div><div class="item-name">Podi Idli</div><div class="item-meta">2 pcs</div></div><div class="item-price">₹80</div></div>
+        <div class="menu-item"><div><div class="item-name">Thatte Idli</div><div class="item-meta">1 pc — large flat idli</div></div><div class="item-price">₹70</div></div>
+        <div class="menu-item"><div><div class="item-name">Mysore Masala Idli</div><div class="item-meta">1 pc</div><span class="item-badge">Popular</span></div><div class="item-price">₹100</div></div>
+      </div>
+    </div>
+    <div class="menu-category" style="margin-top:36px;">
+      <div class="menu-cat-title">Mini Idli <span>சிறு இட்லி</span></div>
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="item-name">Mini Idli</div></div><div class="item-price">₹80</div></div>
+        <div class="menu-item"><div><div class="item-name">Mini Idli Dip</div></div><div class="item-price">₹100</div></div>
+        <div class="menu-item"><div><div class="item-name">Mini Podi Idli</div></div><div class="item-price">₹70</div></div>
+        <div class="menu-item"><div><div class="item-name">Mini Mysore Idli</div><span class="item-badge">Signature</span></div><div class="item-price">₹120</div></div>
+        <div class="menu-item"><div><div class="item-name">Mini Tadka Idli</div></div><div class="item-price">₹120</div></div>
+        <div class="menu-item"><div><div class="item-name">Mini Fry Idli</div></div><div class="item-price">₹120</div></div>
+        <div class="menu-item"><div><div class="item-name">Mini Fry Podi Idli</div></div><div class="item-price">₹130</div></div>
+      </div>
+    </div>
+  </div>
+ <!-- VADA -->
+  <div class="menu-panel" id="tab-vada">
+    <div class="menu-category">
+      <div class="menu-cat-title">Vada <span>வடை</span></div>
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="item-name">Medu Vada</div><div class="item-meta">2 pcs — crispy urad dal fritters</div></div><div class="item-price">₹60</div></div>
+        <div class="menu-item"><div><div class="item-name">Medu Vada Dipped</div><div class="item-meta">Soaked in warm sambar</div><span class="item-badge">Popular</span></div><div class="item-price">₹70</div></div>
+        <div class="menu-item"><div><div class="item-name">Dal Vada</div><div class="item-meta">2 pcs</div></div><div class="item-price">₹60</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AAPAM -->
+  <div class="menu-panel" id="tab-aapam">
+    <div class="menu-category">
+      <div class="menu-cat-title">Aapam <span>ஆப்பம்</span></div>
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="item-name">Sada Aapam</div><div class="item-meta">Lace-edged rice hopper</div></div><div class="item-price">₹80</div></div>
+        <div class="menu-item"><div><div class="item-name">Mysore Aapam</div></div><div class="item-price">₹100</div></div>
+        <div class="menu-item"><div><div class="item-name">Podi Aapam</div></div><div class="item-price">₹90</div></div>
+        <div class="menu-item"><div><div class="item-name">G.V. Spl. Coconut Stew Aapam</div><span class="item-badge">House Special</span></div><div class="item-price">₹110</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OTHERS -->
+  <div class="menu-panel" id="tab-others">
+    <div class="menu-category">
+      <div class="menu-cat-title">Samosa & Parotha</div>
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="item-name">Special Sweet Samosa</div><div class="item-meta">2 pcs</div></div><div class="item-price">₹60</div></div>
+        <div class="menu-item"><div><div class="item-name">Parotha with Veg. Khurma</div><div class="item-meta">2 pcs — Available Thursday only</div><span class="item-badge">Weekly Special</span></div><div class="item-price">₹100</div></div>
+      </div>
+    </div>
+    <div class="menu-category" style="margin-top:36px;">
+      <div class="menu-cat-title">G.V. Spl. Family Thali <span>குடும்ப தாலி</span></div>
+      <div class="menu-grid">
+        <div class="menu-item" style="grid-column:1/-1"><div><div class="item-name">G.V. Spl. Family Dosa</div><div class="item-meta">A generous spread — Idli · Dosa · Vada · Uttapam · Aapam · Parotha · Tea · Coffee</div><span class="item-badge">Ask Staff for Pricing</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BEVERAGES -->
+  <div class="menu-panel" id="tab-bev">
+    <div class="menu-category">
+      <div class="menu-cat-title">Beverages <span>பானங்கள்</span></div>
+      <div class="menu-grid">
+        <div class="menu-item"><div><div class="item-name">Filter Coffee</div><div class="item-meta">Traditional South Indian decoction</div><span class="item-badge">Must Try</span></div><div class="item-price">₹45</div></div>
+        <div class="menu-item"><div><div class="item-name">Spl. Tea</div></div><div class="item-price">₹35</div></div>
+        <div class="menu-item"><div><div class="item-name">Ginger Lemon Honey Tea</div></div><div class="item-price">₹40</div></div>
+        <div class="menu-item"><div><div class="item-name">Black Dry Ginger Pepper Coffee</div><div class="item-meta">A warming South Indian remedy</div></div><div class="item-price">₹50</div></div>
+        <div class="menu-item"><div><div class="item-name">Black Dry Ginger Pepper Tea</div></div><div class="item-price">₹50</div></div>
+        <div class="menu-item"><div><div class="item-name">Butter Milk</div><div class="item-meta">250 ml · Spiced chaas</div></div><div class="item-price">₹20</div></div>
+        <div class="menu-item"><div><div class="item-name">Coconut Milk</div><div class="item-meta">200 ml · Fresh &amp; chilled</div></div><div class="item-price">₹50</div></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- BANANA LEAF QUOTE -->
+<div class="bl-divider">
+  <div class="bl-text">
+    "A meal without sambar is like a day without the sun —<br/>
+    at <em>GV Dosa</em>, we make sure both always shine."
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section id="gallery" style="padding:0;">
+  <div class="gallery-label">
+    <div class="section-label reveal" style="justify-content:center;">From Our Kitchen</div>
+    <h2 class="reveal rd1">A Feast for <em>the Eyes</em></h2>
+  </div>
+  <div class="gallery-strip">
+    <img class="gallery-img" src="https://images.unsplash.com/photo-1630383249896-424e482df921?w=600&q=80" alt="Masala dosa" loading="lazy"/>
+    <img class="gallery-img" src="https://images.unsplash.com/photo-1610057099431-d73a1c9d2f2f?w=600&q=80" alt="South Indian thali" loading="lazy"/>
+    <img class="gallery-img" src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80" alt="Idli sambar" loading="lazy"/>
+    <img class="gallery-img" src="https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=600&q=80" alt="Dosa on griddle" loading="lazy"/>
+    <img class="gallery-img" src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80" alt="Filter coffee" loading="lazy"/>
+    <img class="gallery-img" src="https://images.unsplash.com/photo-1567337710282-00832b415979?w=600&q=80" alt="South Indian spread" loading="lazy"/>
+    <img class="gallery-img" src="https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=600&q=80" alt="Coconut chutney" loading="lazy"/>
+    <!-- duplicate for loop -->
+    <img class="gallery-img" src="https://images.unsplash.com/photo-1630383249896-424e482df921?w=600&q=80" alt="Masala dosa" loading="lazy"/>
+    <img class="gallery-img" src="https://images.unsplash.com/photo-1610057099431-d73a1c9d2f2f?w=600&q=80" alt="South Indian thali" loading="lazy"/>
+    <img class="gallery-img" src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80" alt="Idli sambar" loading="lazy"/>
+    <img class="gallery-img" src="https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=600&q=80" alt="Dosa on griddle" loading="lazy"/>
+    <img class="gallery-img" src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80" alt="Filter coffee" loading="lazy"/>
+    <img class="gallery-img" src="https://images.unsplash.com/photo-1567337710282-00832b415979?w=600&q=80" alt="South Indian spread" loading="lazy"/>
+    <img class="gallery-img" src="https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=600&q=80" alt="Coconut chutney" loading="lazy"/>
+  </div>
+  <div class="gallery-pad"></div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="kolam-bg"></div>
+  <div class="contact-wrap">
+    <div class="contact-text">
+      <div class="section-label reveal">Visit Us</div>
+      <h2 class="reveal rd1">Come, Eat<em>With Us</em></h2>
+      <p class="reveal rd2">No reservation needed. Walk in any time of day and we'll seat you with warmth. Open every single day — including festivals and holidays.</p>
+      <ul class="contact-list reveal rd3">
+        <li class="contact-item">
+          <div class="ci-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+          <div>
+            <div class="ci-label">Address</div>
+            <div class="ci-val">GV Dosa, Surat<br/>Gujarat, India<br/><small style="color:var(--gold);font-size:.75rem;">Update with your exact address</small></div>
+          </div>
+        </li>
+        <li class="contact-item">
+          <div class="ci-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.32 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.59a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div>
+            <div class="ci-label">Phone</div>
+            <div class="ci-val"><a href="tel:+91XXXXXXXXXX">+91 XXXXX XXXXX</a></div>
+          </div>
+        </li>
+        <li class="contact-item">
+          <div class="ci-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div>
+            <div class="ci-label">Hours</div>
+            <div class="ci-val">Open Every Day<br/>7:00 AM – 10:00 PM<br/><span style="color:var(--gold);font-size:.8rem;">Including all holidays 🎉</span></div>
+          </div>
+        </li>
+        <li class="contact-item">
+          <div class="ci-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <div>
+            <div class="ci-label">WhatsApp / Enquiries</div>
+            <div class="ci-val"><a href="https://wa.me/91XXXXXXXXXX">Message us on WhatsApp</a></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="map-block reveal rd2">
+      <div class="map-tag">Find Us</div>
+      <!-- Replace this src with your Google Maps embed URL -->
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d119064.67825092399!2d72.7762726!3d21.1663844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04e59411d1563%3A0xfe4558290938b042!2sSurat%2C%20Gujarat!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo-en">GV Dosa</div>
+      <div class="footer-logo-ta">ஜி.வி. தோசை</div>
+      <p>Authentic South Indian flavours, served with love and tradition every single day.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="#about">Our Story</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#contact">Visit Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-hours">
+      <h4>Hours</h4>
+      <p>Monday – Sunday<br/>7:00 AM – 10:00 PM<br/><span style="color:var(--gold);font-size:.8rem;">Open all holidays</span></p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 GV Dosa, Surat. All rights reserved.</div>
+    <div class="footer-socials">
+      <a href="#" title="Instagram">IG</a>
+      <a href="#" title="Facebook">FB</a>
+      <a href="#" title="WhatsApp">WA</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Cursor
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  }, 80);
+});
+
+// Sticky nav
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Mobile menu
+const hambBtn = document.getElementById('hambBtn');
+const mobMenu = document.getElementById('mobMenu');
+const mobClose = document.getElementById('mobClose');
+function closeMob(){ mobMenu.classList.remove('open'); }
+hambBtn.addEventListener('click', () => mobMenu.classList.toggle('open'));
+mobClose.addEventListener('click', closeMob);
+
+// Menu tabs
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
